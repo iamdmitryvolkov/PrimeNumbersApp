@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PrimeNumbers</string>
+    <string name="founded">Найдено чисел:</string>
+    <string name="sum">Сумма чисел:</string>
+</resources>
