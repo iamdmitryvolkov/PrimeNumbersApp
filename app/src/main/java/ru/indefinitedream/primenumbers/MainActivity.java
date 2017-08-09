@@ -15,6 +15,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<PrimeResult>, TextView.OnEditorActionListener {
 
@@ -22,11 +27,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int PRIME_LOADER_ID = 0;
 
-    private EditText mEditText;
-    private TextView mSumTextView;
-    private TextView mCountTextView;
-    private ProgressBar mProgressBar;
-    private RecyclerView mRecycler;
+    @BindView(R.id.editText)
+    protected EditText mEditText;
+    @BindView(R.id.sumTextView)
+    protected TextView mSumTextView;
+    @BindView(R.id.countTextView)
+    protected TextView mCountTextView;
+    @BindView(R.id.progressBar)
+    protected ProgressBar mProgressBar;
+    @BindView(R.id.recyclerView)
+    protected RecyclerView mRecycler;
     private PrimeNumbersAdapter mAdapter;
 
     private int mPrimeValues;
@@ -36,12 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mEditText = (EditText) findViewById(R.id.editText);
-        mSumTextView = (TextView) findViewById(R.id.sumTextView);
-        mCountTextView = (TextView) findViewById(R.id.countTextView);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mRecycler = (RecyclerView) findViewById(R.id.recyclerView);
-        findViewById(R.id.button).setOnClickListener(this);
+        ButterKnife.bind(this);
 
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -53,14 +58,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mPrimeValues = savedInstanceState.getInt(KEY_PRIME_NUMBERS_LIMIT, 0);
         }
         mEditText.setText(Integer.toString(mPrimeValues));
-        mEditText.setOnEditorActionListener(this);
 
         Bundle args = new Bundle();
         args.putInt(KEY_PRIME_NUMBERS_LIMIT, mPrimeValues);
         getLoaderManager().initLoader(PRIME_LOADER_ID, args, this);
+
     }
 
-    private void startUpdate() {
+    @OnClick(R.id.button)
+    void startUpdate() {
         try {
             mPrimeValues = Integer.parseInt(mEditText.getText().toString());
         } catch (NumberFormatException e) {
